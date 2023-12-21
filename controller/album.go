@@ -94,12 +94,24 @@ func (c *albumController) GetExtendAlbumDetailHandler(w http.ResponseWriter, r *
 		return
 	}
 
-	album, err := c.service.GetExtendAlbumService(r.Context(), model.AlbumID(albumID))
+	extendAlbum, err := c.service.GetExtendAlbumService(r.Context(), model.AlbumID(albumID))
 	if err != nil {
 		errorHandler(w, r, 500, err.Error())
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(album)
+	json.NewEncoder(w).Encode(extendAlbum)
+}
+
+// GET /albums のハンドラー 拡張
+func (c *albumController) GetExtendAlbumListHandler(w http.ResponseWriter, r *http.Request) {
+	extendAlbums, err := c.service.GetExtendAlbumListService(r.Context())
+	if err != nil {
+		errorHandler(w, r, 500, err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	json.NewEncoder(w).Encode(extendAlbums)
 }

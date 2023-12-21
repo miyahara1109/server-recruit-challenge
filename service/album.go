@@ -13,6 +13,7 @@ type AlbumService interface {
 	PostAlbumService(ctx context.Context, album *model.Album) error
 	DeleteAlbumService(ctx context.Context, albumID model.AlbumID) error
 	GetExtendAlbumService(ctx context.Context, albumID model.AlbumID) (*model.ExtendAlbum, error)
+	GetExtendAlbumListService(ctx context.Context) ([]*model.ExtendAlbum, error)
 }
 
 type albumService struct {
@@ -67,7 +68,35 @@ func (s *albumService) GetExtendAlbumService(ctx context.Context, albumID model.
 		return nil, err
 	}
 
-	extendAlbum, err := s.albumRepository.ConvertExtend(ctx, album, singer)
+	extendAlbum := ConvertExtend(ctx, album, singer)
 
 	return extendAlbum, nil
+}
+
+func (s *albumService) GetExtendAlbumListService(ctx context.Context) ([]*model.ExtendAlbum, error) {
+	albums, err := s.albumRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	extendAlbums := make([]*model.ExtendAlbum, 0, len(albums))
+	for _, album := range albums {
+		singer, err := s.singerService.GetSingerService(ctx, model.SingerID(album.SingerID))
+		if err != nil {
+			return nil, err
+		}
+		extendAlbum := ConvertExtend(ctx, album, singer)
+		extendAlbums = append(extendAlbums, extendAlbum)
+	}
+
+	return extendAlbums, nil
+}
+
+func ConvertExtend(ctx context.Context, album *model.Album, singer *model.Singer) *model.ExtendAlbum {
+	extendAlbum := model.ExtendAlbum{
+		ID: album.ID,
+		Title: album.Title,
+		Singer: singer,
+	}
+	return &extendAlbum
 }

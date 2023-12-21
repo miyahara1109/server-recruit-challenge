@@ -11,5 +11,4 @@ type AlbumRepository interface {
 	Get(ctx context.Context, id model.AlbumID) (*model.Album, error)
 	Add(ctx context.Context, album *model.Album) error
 	Delete(ctx context.Context, id model.AlbumID) error
-	ConvertExtend(ctx context.Context, album *model.Album, singer *model.Singer) (*model.ExtendAlbum, error)
 }

@@ -60,8 +60,3 @@ func (r *albumRepository) Delete(ctx context.Context, id model.AlbumID) error {
 	r.Unlock()
 	return nil
 }
-
-func (r *albumRepository) ConvertExtend(ctx context.Context, album *model.Album, singer *model.Singer) (*model.ExtendAlbum, error) {
-	extendAlbum := model.ExtendAlbum{ID: album.ID, Title: album.Title, Singer: singer}
-	return &extendAlbum, nil
-}

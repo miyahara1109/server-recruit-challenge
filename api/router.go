@@ -26,7 +26,9 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("/singers", singerController.PostSingerHandler).Methods(http.MethodPost)
 	r.HandleFunc("/singers/{id:[0-9]+}", singerController.DeleteSingerHandler).Methods(http.MethodDelete)
 
-	r.HandleFunc("/albums", albumController.GetAlbumListHandler).Methods(http.MethodGet)
+	//r.HandleFunc("/albums", albumController.GetAlbumListHandler).Methods(http.MethodGet)
+	r.HandleFunc("/albums", albumController.GetExtendAlbumListHandler).Methods(http.MethodGet)
+	//r.HandleFunc("/albums/{id:[0-9]+}", albumController.GetAlbumDetailHandler).Methods(http.MethodGet)
 	r.HandleFunc("/albums/{id:[0-9]+}", albumController.GetExtendAlbumDetailHandler).Methods(http.MethodGet)
 	r.HandleFunc("/albums", albumController.PostAlbumHandler).Methods(http.MethodPost)
 	r.HandleFunc("/albums/{id:[0-9]+}", albumController.DeleteAlbumHandler).Methods(http.MethodDelete)
