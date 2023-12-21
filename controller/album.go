@@ -84,3 +84,22 @@ func (c *albumController) DeleteAlbumHandler(w http.ResponseWriter, r *http.Requ
 	}
 	w.WriteHeader(204)
 }
+
+// GET /albums/{id} のハンドラー 拡張
+func (c *albumController) GetExtendAlbumDetailHandler(w http.ResponseWriter, r *http.Request) {
+	albumID, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		err = fmt.Errorf("invalid path param: %w", err)
+		errorHandler(w, r, 400, err.Error())
+		return
+	}
+
+	album, err := c.service.GetExtendAlbumService(r.Context(), model.AlbumID(albumID))
+	if err != nil {
+		errorHandler(w, r, 500, err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	json.NewEncoder(w).Encode(album)
+}
